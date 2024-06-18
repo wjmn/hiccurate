@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "juicebox.js": "^2.4.8",
+    "@babel/plugin-transform-class-properties": "^7.24.6"
+  }
+}
