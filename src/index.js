@@ -26,6 +26,7 @@ var app = Elm.Main.init({
 var hicBrowser = null;
 var hicBrowserId = null;
 var hicViewport = null;
+var hicUpperNavbar = null;
 
 // When Hi-C file is selected, load it into Hi-C browser
 app.ports.sendHicLoadedFile.subscribe(file => {
@@ -37,9 +38,9 @@ app.ports.sendHicLoadedFile.subscribe(file => {
     hicBrowser = browser;
     hicBrowserId = hicBrowser.id;
     hicViewport = document.getElementById(hicBrowserId+"-viewport");
+    hicUpperNavbar = document.getElementById(hicBrowserId+"-upper-hic-nav-bar-widget-container");
 
-    // Update 
-    hicViewport.addEventListener("mousemove", function(e) {
+    const sendMouseMoveData = function(e) {
       var rect = e.target.getBoundingClientRect();
       var relX = e.clientX - rect.left;
       var relY = e.clientY - rect.top;
@@ -50,9 +51,64 @@ app.ports.sendHicLoadedFile.subscribe(file => {
         "rect": rect,
         "syncState": state,
       })
+    };
+
+
+    // Update mouse move data when mouse moves
+    hicViewport.addEventListener("mousemove", sendMouseMoveData);
+    hicUpperNavbar.addEventListener("click", function(e) {
+      // pause slightly
+      setTimeout(function() {
+        app.ports.receiveMouseMoveData.send({
+          "relX": 0,
+          "relY": 0,
+          "rect": hicViewport.getBoundingClientRect(),
+          "syncState": hicBrowser.getSyncState(),
+        })
+      }, 10)
+    });
+
+    hicViewport.addEventListener("click", function(e) {
+      // pause slightly
+      setTimeout(function() {
+        sendMouseMoveData(e)
+      }, 10)});
+
+    //   document.getElementsByClassName("hic-resolution-selector-container")[0].children[1].addEventListener("change", function(e) {
+    //     var state = hicBrowser.getSyncState();
+    //     setTimeout(function() {
+    //       app.ports.receiveMouseMoveData.send({
+    //       "relX": 0,
+    //       "relY": 0,
+    //       "rect": hicViewport.getBoundingClientRect(),
+    //       "syncState": state,
+    //     })}, 20);
+    //   });
+
+    // Send right click event to Elm
+    hicViewport.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      app.ports.rightClickedHicPosition.send({});
     });
 
 
+  });
+})
+
+
+app.ports.sendNewHicBrowserSyncState.subscribe(newSyncState => {
+  console.log(newSyncState);
+  if (hicBrowser != null) {
+    hicBrowser.syncState(newSyncState);
+  };
+
+  var rect = hicViewport.getBoundingClientRect();
+
+  app.ports.receiveMouseMoveData.send({
+    "relX": rect.width / 2,
+    "relY": rect.height / 2,
+    "rect": rect,
+    "syncState": newSyncState,
   });
 })
 
