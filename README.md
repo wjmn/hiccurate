@@ -8,4 +8,4 @@ Todos:
 - [X] render breakpoint crosshair size depending on zoom level / resolution
 - [X] Save breakpoints to file in breakfinder format
 - [X] Quick buttons to navigate zoom levels and chromosomes
-- [ ] If breakpoints are put in the upper right corner of intra-chromosomal matrices, correct the strandness
+- [X] If breakpoints are put in the upper right corner of intra-chromosomal matrices, don't allow adding breakpoint
