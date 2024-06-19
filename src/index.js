@@ -40,6 +40,15 @@ app.ports.sendHicLoadedFile.subscribe(file => {
     hicViewport = document.getElementById(hicBrowserId+"-viewport");
     hicUpperNavbar = document.getElementById(hicBrowserId+"-upper-hic-nav-bar-widget-container");
 
+    var state = hicBrowser.getSyncState();
+    app.ports.receiveMouseMoveData.send({
+      "relX": -1,
+      "relY": -1,
+      "rect": hicViewport.getBoundingClientRect(),
+      "syncState": state,
+    })
+
+
     const sendMouseMoveData = function(e) {
       var rect = e.target.getBoundingClientRect();
       var relX = e.clientX - rect.left;
@@ -72,7 +81,7 @@ app.ports.sendHicLoadedFile.subscribe(file => {
       // pause slightly
       setTimeout(function() {
         sendMouseMoveData(e)
-      }, 10)});
+      }, 50)});
 
     //   document.getElementsByClassName("hic-resolution-selector-container")[0].children[1].addEventListener("change", function(e) {
     //     var state = hicBrowser.getSyncState();
@@ -97,7 +106,6 @@ app.ports.sendHicLoadedFile.subscribe(file => {
 
 
 app.ports.sendNewHicBrowserSyncState.subscribe(newSyncState => {
-  console.log(newSyncState);
   if (hicBrowser != null) {
     hicBrowser.syncState(newSyncState);
   };
@@ -105,8 +113,10 @@ app.ports.sendNewHicBrowserSyncState.subscribe(newSyncState => {
   var rect = hicViewport.getBoundingClientRect();
 
   app.ports.receiveMouseMoveData.send({
-    "relX": rect.width / 2,
-    "relY": rect.height / 2,
+    // "relX": rect.width / 2,
+    // "relY": rect.height / 2,
+    "relX": 0,
+    "relY": 0,
     "rect": rect,
     "syncState": newSyncState,
   });

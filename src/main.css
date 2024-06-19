@@ -28,6 +28,8 @@ div.hic-root {
   border-width: 0px;
   margin: 0;
   z-index: 0;
+  position: absolute;
+  top: -70px;
 }
 
 /***********************************************************************/
@@ -60,10 +62,10 @@ div.hic-root {
   left: -640px;
   position: absolute;
   width: 640px;
-  height: 800px;
+  height: calc(800px - 70px);
   z-index: 20;
   pointer-events: none;
-  /* background: blue; */
+  background: blue;
   background: transparent;
   opacity: 1;
 }
@@ -78,4 +80,74 @@ div.hic-root {
   position: absolute;
   background: none;
   /* background: yellow; */
+}
+
+#elm-hic-overlay-buttons {
+  top: calc(800px - 70px);
+  left: -640px;
+  position: absolute;
+  width: 640px;
+  height: calc(100vh - 800px + 70px);
+  z-index: 20;
+}
+
+#chromosome-grid-selector-container {
+  position: relative;
+}
+#chromosome-grid-selector {
+  display: grid;
+  /* width: calc(100vh - 800px + 70px); */
+  /* height: calc(100vh - 800px + 70px); */
+  width: 200px;
+  height: 200px;
+  background: #eaeaea;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(24, 1fr);
+}
+
+#chromosome-box {
+  position: relative;
+  background: white;
+}
+
+
+#chromosome-box:hover {
+  background: darkgray;
+}
+
+#chromosome-box:hover > #chromosome-box-tooltip,
+#all-chromosome-box:hover > #chromosome-box-tooltip {
+  display: block;
+}
+
+#chromosome-box.highlight {
+  background: red;
+}
+
+#chromosome-box-tooltip {
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 10px;
+  width: 80px;
+  background: gray;
+  color: white;
+  display: none;
+  pointer-events: none;
+  z-index: 30;
+  line-height: 1;
+  font-size: 11px;
+  padding: 5px;
+}
+
+#chromosome-all-button {
+  position: absolute;
+  top: 50px;
+  left: 100px;
+}
+
+#all-chromosome-box > #chromosome-box-tooltip {
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 20px;
 }
