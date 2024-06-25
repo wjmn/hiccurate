@@ -23,7 +23,7 @@ A prototype of the application is currently hosted at [https://wjmn.github.io/st
 
 ## Acknowledgements
 
-The [Arima SV Pipeline](https://github.com/ArimaGenomics/Arima-SV-Pipeline) is developed by Arima Genomics. Support for the Arima SV Pipeline can be found on their GitHub page; thank you Arima for outstanding support with using the Arima SV Pipeline. 
+The [Arima SV Pipeline](https://github.com/ArimaGenomics/Arima-SV-Pipeline) is developed by Arima Genomics. Support for the Arima SV Pipeline can be found on their GitHub page; thank you Arima for outstanding support with using the Arima SV Pipeline, and to Jon Belton at Arima for proposing the idea for a tool. 
 
 This project is built upon the Hi-C viewer from [juicebox.js](https://github.com/igvteam/juicebox.js). 
 
