@@ -4,7 +4,7 @@
 
 This project provides an interactive application for viewing, adding, adjusting and deleting breakpoint calls from the [Arima SV Pipeline](https://github.com/ArimaGenomics/Arima-SV-Pipeline). hiccurate has been specifically designed to improve the efficiency and ergonomics of structural variant curation, and provides a strand-aware crosshair and fast navigation tools for modifying breakpoints and adjusting viewing parameters. 
 
-This is currently a work in-progress. This project is currently only designed to work with the hic_breakfinder calls from the Arima SV Pipeline (v1.3). 
+This is currently a work in-progress. This project is currently only designed to work with Hi-C files in `.hic` format and breakpoints in the `hic_breakfinder`-style `.breaks.bedpe` format from the Arima SV Pipeline (v1.3). 
 
 # Try it Out
 
