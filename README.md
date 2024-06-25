@@ -1,11 +1,30 @@
-# Hi-C Curate
+# hiccurate: An Interactive Hi-C Breakpoint Curator
 
-Todos:
-- [X] Read .bedpe file (breakfinder format, generic format) intro breakspear
-- [X] Highlight breaks on hover / click
-- [X] Click breakpoint to immediately navigate to there on viewport
-- [X] Clamp hic browser min and max views
-- [X] render breakpoint crosshair size depending on zoom level / resolution
-- [X] Save breakpoints to file in breakfinder format
-- [X] Quick buttons to navigate zoom levels and chromosomes
-- [X] If breakpoints are put in the upper right corner of intra-chromosomal matrices, don't allow adding breakpoint
+![hiccurate](./images/hiccurate.gif)
+
+This project provides an interactive application for viewing, adding, adjusting and deleting breakpoint calls from the [Arima SV Pipeline](https://github.com/ArimaGenomics/Arima-SV-Pipeline). hiccurate has been specifically designed to improve the efficiency and ergonomics of structural variant curation, and provides a strand-aware crosshair and fast navigation tools for modifying breakpoints and adjusting viewing parameters. 
+
+This is currently a work in-progress. This project is currently only designed to work with the hic_breakfinder calls from the Arima SV Pipeline (v1.3). 
+
+# Try it Out
+
+A prototype of the application is currently hosted at [https://wjmn.github.io/static/docs/hiccurate-prototype.html](https://wjmn.github.io/static/docs/hiccurate-prototype.html). An internet connection is needed to load some of the CSS styles, but the app is otherwise completely client-side.
+
+# Shortcuts 
+
+| Key | Action | 
+|-----|--------|
+| Right click Hi-C map on left | Add breakpoint at cursor with current strandness |
+| `1`, `2`, `3`, `4` |  Change crosshair strandness |
+| `w` | Previous breakpoint | 
+| `s` | Next breakpoint |
+| `a` | Delete selected breakpoint |
+| `d` | Toggle check selected breakpoint |
+
+## Acknowledgements
+
+The [Arima SV Pipeline](https://github.com/ArimaGenomics/Arima-SV-Pipeline) is developed by Arima Genomics. Support for the Arima SV Pipeline can be found on their GitHub page; thank you Arima for outstanding support with using the Arima SV Pipeline. 
+
+This project is built upon the Hi-C viewer from [juicebox.js](https://github.com/igvteam/juicebox.js). 
+
+This is currently an internal research tool developed at Snuderl Lab, NYU. 
