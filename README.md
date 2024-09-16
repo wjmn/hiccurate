@@ -20,6 +20,7 @@ A prototype of the application is currently hosted at [https://wjmn.github.io/st
 | `s` | Next breakpoint |
 | `a` | Delete selected breakpoint |
 | `d` | Toggle check selected breakpoint |
+| `q` | Undo last deletion |
 
 ## Acknowledgements
 

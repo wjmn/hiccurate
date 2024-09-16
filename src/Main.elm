@@ -145,6 +145,7 @@ type alias HicLoadedData =
     , hoveredBreakpoint : Maybe Breakpoint
     , lastClicked : Maybe Breakpoint
     , lastClickedIndex : Int
+    , deletedBreakpoints: List Breakpoint
     }
 
 
@@ -724,6 +725,7 @@ type Msg
     | MouseEnter Breakpoint
     | MouseLeave Breakpoint
     | ClickedBreakpoint Int Breakpoint
+    | ClickedUndoDeleteBreakpoint
     | ClickedSaveBreakpoints
     | ClickedResolution Int
     | ClickedChromosomeBox ( String, String )
@@ -758,6 +760,7 @@ update msg state =
                         , hoveredBreakpoint = Nothing
                         , lastClicked = Nothing
                         , lastClickedIndex = 0
+                        , deletedBreakpoints = []
                         }
                         |> withCmd (sendHicLoadedFile value)
 
@@ -833,6 +836,13 @@ update msg state =
                             noop
 
                 DeleteBreakpoint index ->
+                    let
+                        breakpoint = List.indexedMap Tuple.pair data.breakpoints |> List.filter (\(i, bp) -> i == index) |> List.head |> Maybe.map Tuple.second 
+                        newDeletedBreakpoints = 
+                            case breakpoint of 
+                                Just b -> b :: data.deletedBreakpoints
+                                Nothing -> data.deletedBreakpoints
+                    in 
                     HicLoaded
                         { data
                             | breakpoints =
@@ -846,6 +856,7 @@ update msg state =
                                     )
                                     (List.indexedMap Tuple.pair data.breakpoints)
                             , lastClicked = Nothing
+                            , deletedBreakpoints = newDeletedBreakpoints
                         }
                         |> withCmd Cmd.none
                 DeleteBreakpointByValue breakpoint -> 
@@ -854,6 +865,7 @@ update msg state =
                             | breakpoints =
                                 List.filter (\bp -> bp /= breakpoint) data.breakpoints
                             , lastClicked = Nothing
+                            , deletedBreakpoints = breakpoint :: data.deletedBreakpoints
                         }
                         |> withCmd Cmd.none
 
@@ -996,6 +1008,23 @@ update msg state =
                             , lastClicked = Just { breakpoint | checked = not breakpoint.checked }
                         }
                         |> withCmd Cmd.none
+
+                ClickedUndoDeleteBreakpoint -> 
+                    case data.deletedBreakpoints of 
+                        [] -> 
+                            noop
+                        (lastDeleted :: tail) -> 
+                            let 
+                                newBreakpoints = 
+                                    lastDeleted :: data.breakpoints
+                                    |> List.sortBy (\bp -> ( ( Dict.get bp.chrA chromIndices |> Maybe.withDefault 0, Dict.get bp.chrB chromIndices |> Maybe.withDefault 0 ), ( bp.posA, bp.posB ) ))
+                            in 
+                            HicLoaded
+                                { data
+                                    | breakpoints = newBreakpoints
+                                    , deletedBreakpoints = tail
+                                }
+                                |> withCmd Cmd.none
 
                 ClickedNextOrPreviousIndex delta -> 
                     let
@@ -1209,7 +1238,7 @@ hicView data =
             ]
         , div
             [ id "elm-main", tw "p-8 flex flex-col w-full" ]
-            [ div [tw "text-gray-500 text-xs mb-4"] [text "Right click map: add breakpoint at cursor. 1/2/3/4: change crosshair strandness. W/S: navigate breakpoint table. A: delete selected breakpoint. D: toggle checked."]
+            [ div [tw "text-gray-500 text-xs mb-4"] [text "Right click map: add breakpoint at cursor. 1/2/3/4: change crosshair strandness. W/S: navigate breakpoint table. A: delete selected breakpoint. Q: undo last deletion. D: toggle checked."]
             , div [] [h1 [ tw "w-full text-2xl mb-4"] [text data.hicName]]
             , div [ tw "bg-gray-100 w-full flex rounded px-2 py-1 justify-between items-center text-sm" ]
                 [ div [tw "text-sm mr-4 text-gray-700"] [text "(Optional) Add breaks from Hi-C Breakfinder .bedpe file..."]
@@ -1512,6 +1541,8 @@ decoderKeyPress data =
                         Json.succeed (ClickedNextOrPreviousIndex -1)
                     "s" -> 
                         Json.succeed (ClickedNextOrPreviousIndex 1)
+                    "q" -> 
+                        Json.succeed ClickedUndoDeleteBreakpoint
 
                     _ ->
                         Json.fail "Invalid key"
