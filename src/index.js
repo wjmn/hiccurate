@@ -34,15 +34,6 @@ app.ports.sendHicLoadedFile.subscribe(file => {
   // Load the file into Hi-C browser
   juicebox.init(juiceboxContainer, {
     "url": file,
-    "tracks": [
-      {
-          "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/ncbiRefSeq.txt.gz",
-          "type": "annotation",
-          "format": "refgene",
-          "name": "RefSeq (hg38)",
-          "altColor": "rgb(150,0,0)",
-      },
-    ]
   }).then((browser) => {
     hicBrowser = browser;
     hicBrowserId = hicBrowser.id;
