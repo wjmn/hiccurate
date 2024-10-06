@@ -922,7 +922,7 @@ update msg state =
                             allBreakpointsToString data.breakpoints
                     in
                     HicLoaded data
-                        |> withCmd (File.Download.string ((data.hicName |> String.replace "_inter_30" "" |> String.replace ".hic" "") ++ ".breaks.bedpe") "text/plain" outString)
+                        |> withCmd (File.Download.string ((data.hicName |> String.replace "_inter_30" "" |> String.replace ".hic" "") ++ "_curated_breakpoints.bedpe") "text/plain" outString)
 
                 ClickedResolution newResolution ->
                     case data.mouseMoveData of
